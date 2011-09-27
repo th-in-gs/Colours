@@ -1,0 +1,345 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		7DB6E0D7142D03380067B650 /* Icon-72.png in Resources */ = {isa = PBXBuildFile; fileRef = 7DB6E0D3142D03380067B650 /* Icon-72.png */; };
+		7DB6E0D8142D03380067B650 /* Icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 7DB6E0D4142D03380067B650 /* Icon.png */; };
+		7DB6E0D9142D03380067B650 /* Icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7DB6E0D5142D03380067B650 /* Icon@2x.png */; };
+		7DB6E0DA142D03380067B650 /* iTunesArtwork in Resources */ = {isa = PBXBuildFile; fileRef = 7DB6E0D6142D03380067B650 /* iTunesArtwork */; };
+		7DB6E0DC142D051E0067B650 /* iMacGrey.png in Resources */ = {isa = PBXBuildFile; fileRef = 7DB6E0DB142D051E0067B650 /* iMacGrey.png */; };
+		7DED0DC01431E65A008D8FBB /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DED0DBF1431E65A008D8FBB /* main.m */; };
+		7DED0E37143219AE008D8FBB /* iMacGrey@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7DED0E36143219AD008D8FBB /* iMacGrey@2x.png */; };
+		C9B7852D142CEC0A0070BEDE /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C9B7852C142CEC0A0070BEDE /* UIKit.framework */; };
+		C9B7852F142CEC0A0070BEDE /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C9B7852E142CEC0A0070BEDE /* Foundation.framework */; };
+		C9B78531142CEC0A0070BEDE /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C9B78530142CEC0A0070BEDE /* CoreGraphics.framework */; };
+		C9B78533142CEC0A0070BEDE /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C9B78532142CEC0A0070BEDE /* QuartzCore.framework */; };
+		C9B78535142CEC0A0070BEDE /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C9B78534142CEC0A0070BEDE /* OpenGLES.framework */; };
+		C9B7853B142CEC0A0070BEDE /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = C9B78539142CEC0A0070BEDE /* InfoPlist.strings */; };
+		C9B78541142CEC0A0070BEDE /* ColoursAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = C9B78540142CEC0A0070BEDE /* ColoursAppDelegate.m */; };
+		C9B78544142CEC0A0070BEDE /* MainWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = C9B78542142CEC0A0070BEDE /* MainWindow.xib */; };
+		C9B78546142CEC0A0070BEDE /* Colours.vsh in Resources */ = {isa = PBXBuildFile; fileRef = C9B78545142CEC0A0070BEDE /* Colours.vsh */; };
+		C9B78548142CEC0A0070BEDE /* Colours.fsh in Resources */ = {isa = PBXBuildFile; fileRef = C9B78547142CEC0A0070BEDE /* Colours.fsh */; };
+		C9B7854B142CEC0A0070BEDE /* EAGLView.m in Sources */ = {isa = PBXBuildFile; fileRef = C9B7854A142CEC0A0070BEDE /* EAGLView.m */; };
+		C9B7854E142CEC0A0070BEDE /* ColoursViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C9B7854D142CEC0A0070BEDE /* ColoursViewController.m */; };
+		C9B78551142CEC0A0070BEDE /* ColoursViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = C9B7854F142CEC0A0070BEDE /* ColoursViewController.xib */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		7DB6E0D0142CFF770067B650 /* Colours-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "Colours-Info.plist"; sourceTree = "<group>"; };
+		7DB6E0D1142CFF770067B650 /* Colours-Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Colours-Prefix.pch"; sourceTree = "<group>"; };
+		7DB6E0D3142D03380067B650 /* Icon-72.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon-72.png"; sourceTree = "<group>"; };
+		7DB6E0D4142D03380067B650 /* Icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Icon.png; sourceTree = "<group>"; };
+		7DB6E0D5142D03380067B650 /* Icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon@2x.png"; sourceTree = "<group>"; };
+		7DB6E0D6142D03380067B650 /* iTunesArtwork */ = {isa = PBXFileReference; lastKnownFileType = file; path = iTunesArtwork; sourceTree = "<group>"; };
+		7DB6E0DB142D051E0067B650 /* iMacGrey.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = iMacGrey.png; sourceTree = "<group>"; };
+		7DED0DBF1431E65A008D8FBB /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		7DED0E36143219AD008D8FBB /* iMacGrey@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "iMacGrey@2x.png"; sourceTree = "<group>"; };
+		C9B78528142CEC0A0070BEDE /* Colours.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Colours.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		C9B7852C142CEC0A0070BEDE /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
+		C9B7852E142CEC0A0070BEDE /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		C9B78530142CEC0A0070BEDE /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
+		C9B78532142CEC0A0070BEDE /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
+		C9B78534142CEC0A0070BEDE /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = System/Library/Frameworks/OpenGLES.framework; sourceTree = SDKROOT; };
+		C9B7853A142CEC0A0070BEDE /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		C9B7853F142CEC0A0070BEDE /* ColoursAppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ColoursAppDelegate.h; sourceTree = "<group>"; };
+		C9B78540142CEC0A0070BEDE /* ColoursAppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ColoursAppDelegate.m; sourceTree = "<group>"; };
+		C9B78543142CEC0A0070BEDE /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/MainWindow.xib; sourceTree = "<group>"; };
+		C9B78545142CEC0A0070BEDE /* Colours.vsh */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.glsl; path = Colours.vsh; sourceTree = "<group>"; };
+		C9B78547142CEC0A0070BEDE /* Colours.fsh */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.glsl; path = Colours.fsh; sourceTree = "<group>"; };
+		C9B78549142CEC0A0070BEDE /* EAGLView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EAGLView.h; sourceTree = "<group>"; };
+		C9B7854A142CEC0A0070BEDE /* EAGLView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = EAGLView.m; sourceTree = "<group>"; };
+		C9B7854C142CEC0A0070BEDE /* ColoursViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ColoursViewController.h; sourceTree = "<group>"; };
+		C9B7854D142CEC0A0070BEDE /* ColoursViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ColoursViewController.m; sourceTree = "<group>"; };
+		C9B78550142CEC0A0070BEDE /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/ColoursViewController.xib; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		C9B78525142CEC0A0070BEDE /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C9B7852D142CEC0A0070BEDE /* UIKit.framework in Frameworks */,
+				C9B7852F142CEC0A0070BEDE /* Foundation.framework in Frameworks */,
+				C9B78531142CEC0A0070BEDE /* CoreGraphics.framework in Frameworks */,
+				C9B78533142CEC0A0070BEDE /* QuartzCore.framework in Frameworks */,
+				C9B78535142CEC0A0070BEDE /* OpenGLES.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		7DB6E0CE142CFEFA0067B650 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				7DB6E0D0142CFF770067B650 /* Colours-Info.plist */,
+				C9B78539142CEC0A0070BEDE /* InfoPlist.strings */,
+				7DB6E0D6142D03380067B650 /* iTunesArtwork */,
+				7DB6E0D4142D03380067B650 /* Icon.png */,
+				7DB6E0D3142D03380067B650 /* Icon-72.png */,
+				7DB6E0D5142D03380067B650 /* Icon@2x.png */,
+				7DB6E0DB142D051E0067B650 /* iMacGrey.png */,
+				7DED0E36143219AD008D8FBB /* iMacGrey@2x.png */,
+				C9B78542142CEC0A0070BEDE /* MainWindow.xib */,
+				C9B7854F142CEC0A0070BEDE /* ColoursViewController.xib */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+		7DED0DBE1431E65A008D8FBB /* Other Sources */ = {
+			isa = PBXGroup;
+			children = (
+				7DED0DBF1431E65A008D8FBB /* main.m */,
+				7DB6E0D1142CFF770067B650 /* Colours-Prefix.pch */,
+			);
+			path = "Other Sources";
+			sourceTree = "<group>";
+		};
+		C9B7851D142CEC0A0070BEDE = {
+			isa = PBXGroup;
+			children = (
+				C9B78536142CEC0A0070BEDE /* Colours */,
+				C9B7852B142CEC0A0070BEDE /* Frameworks */,
+				C9B78529142CEC0A0070BEDE /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		C9B78529142CEC0A0070BEDE /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				C9B78528142CEC0A0070BEDE /* Colours.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		C9B7852B142CEC0A0070BEDE /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				C9B7852C142CEC0A0070BEDE /* UIKit.framework */,
+				C9B7852E142CEC0A0070BEDE /* Foundation.framework */,
+				C9B78530142CEC0A0070BEDE /* CoreGraphics.framework */,
+				C9B78532142CEC0A0070BEDE /* QuartzCore.framework */,
+				C9B78534142CEC0A0070BEDE /* OpenGLES.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		C9B78536142CEC0A0070BEDE /* Colours */ = {
+			isa = PBXGroup;
+			children = (
+				C9B7854C142CEC0A0070BEDE /* ColoursViewController.h */,
+				C9B7854D142CEC0A0070BEDE /* ColoursViewController.m */,
+				C9B78545142CEC0A0070BEDE /* Colours.vsh */,
+				C9B78547142CEC0A0070BEDE /* Colours.fsh */,
+				C9B7853F142CEC0A0070BEDE /* ColoursAppDelegate.h */,
+				C9B78540142CEC0A0070BEDE /* ColoursAppDelegate.m */,
+				C9B78549142CEC0A0070BEDE /* EAGLView.h */,
+				C9B7854A142CEC0A0070BEDE /* EAGLView.m */,
+				7DED0DBE1431E65A008D8FBB /* Other Sources */,
+				7DB6E0CE142CFEFA0067B650 /* Resources */,
+			);
+			path = Colours;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		C9B78527142CEC0A0070BEDE /* Colours */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = C9B78554142CEC0A0070BEDE /* Build configuration list for PBXNativeTarget "Colours" */;
+			buildPhases = (
+				C9B78524142CEC0A0070BEDE /* Sources */,
+				C9B78525142CEC0A0070BEDE /* Frameworks */,
+				C9B78526142CEC0A0070BEDE /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = Colours;
+			productName = Colours;
+			productReference = C9B78528142CEC0A0070BEDE /* Colours.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		C9B7851F142CEC0A0070BEDE /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				ORGANIZATIONNAME = "Things Made Out Of Other Things Ltd.";
+			};
+			buildConfigurationList = C9B78522142CEC0A0070BEDE /* Build configuration list for PBXProject "Colours" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = C9B7851D142CEC0A0070BEDE;
+			productRefGroup = C9B78529142CEC0A0070BEDE /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				C9B78527142CEC0A0070BEDE /* Colours */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		C9B78526142CEC0A0070BEDE /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C9B7853B142CEC0A0070BEDE /* InfoPlist.strings in Resources */,
+				C9B78544142CEC0A0070BEDE /* MainWindow.xib in Resources */,
+				C9B78546142CEC0A0070BEDE /* Colours.vsh in Resources */,
+				C9B78548142CEC0A0070BEDE /* Colours.fsh in Resources */,
+				C9B78551142CEC0A0070BEDE /* ColoursViewController.xib in Resources */,
+				7DB6E0D7142D03380067B650 /* Icon-72.png in Resources */,
+				7DB6E0D8142D03380067B650 /* Icon.png in Resources */,
+				7DB6E0D9142D03380067B650 /* Icon@2x.png in Resources */,
+				7DB6E0DA142D03380067B650 /* iTunesArtwork in Resources */,
+				7DB6E0DC142D051E0067B650 /* iMacGrey.png in Resources */,
+				7DED0E37143219AE008D8FBB /* iMacGrey@2x.png in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		C9B78524142CEC0A0070BEDE /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C9B78541142CEC0A0070BEDE /* ColoursAppDelegate.m in Sources */,
+				C9B7854B142CEC0A0070BEDE /* EAGLView.m in Sources */,
+				C9B7854E142CEC0A0070BEDE /* ColoursViewController.m in Sources */,
+				7DED0DC01431E65A008D8FBB /* main.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXVariantGroup section */
+		C9B78539142CEC0A0070BEDE /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				C9B7853A142CEC0A0070BEDE /* en */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+		C9B78542142CEC0A0070BEDE /* MainWindow.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				C9B78543142CEC0A0070BEDE /* en */,
+			);
+			name = MainWindow.xib;
+			sourceTree = "<group>";
+		};
+		C9B7854F142CEC0A0070BEDE /* ColoursViewController.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				C9B78550142CEC0A0070BEDE /* en */,
+			);
+			name = ColoursViewController.xib;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		C9B78552142CEC0A0070BEDE /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = DEBUG;
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 4.3;
+				SDKROOT = iphoneos4.3;
+			};
+			name = Debug;
+		};
+		C9B78553142CEC0A0070BEDE /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 4.3;
+				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
+				SDKROOT = iphoneos4.3;
+			};
+			name = Release;
+		};
+		C9B78555142CEC0A0070BEDE /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				COPY_PHASE_STRIP = NO;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "Colours/Other Sources/Colours-Prefix.pch";
+				"GCC_THUMB_SUPPORT[arch=armv6]" = "";
+				INFOPLIST_FILE = "Colours/Resources/Colours-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = "1,2";
+				WRAPPER_EXTENSION = app;
+			};
+			name = Debug;
+		};
+		C9B78556142CEC0A0070BEDE /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				COPY_PHASE_STRIP = YES;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "Colours/Other Sources/Colours-Prefix.pch";
+				"GCC_THUMB_SUPPORT[arch=armv6]" = "";
+				INFOPLIST_FILE = "Colours/Resources/Colours-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+				WRAPPER_EXTENSION = app;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		C9B78522142CEC0A0070BEDE /* Build configuration list for PBXProject "Colours" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				C9B78552142CEC0A0070BEDE /* Debug */,
+				C9B78553142CEC0A0070BEDE /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		C9B78554142CEC0A0070BEDE /* Build configuration list for PBXNativeTarget "Colours" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				C9B78555142CEC0A0070BEDE /* Debug */,
+				C9B78556142CEC0A0070BEDE /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = C9B7851F142CEC0A0070BEDE /* Project object */;
+}
