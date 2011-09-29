@@ -30,7 +30,9 @@
 @property (nonatomic, assign) GLuint program;
 
 // Shader attribute and uniform locations.
-@property (nonatomic, assign) GLuint aPosition, aTextureCoordinate, sTexture;
+@property (nonatomic, assign) GLuint aPosition, aTextureCoordinate;
+@property (nonatomic, assign) GLuint uPositioningMatrix;
+@property (nonatomic, assign) GLuint sTexture;
 
 - (BOOL)loadShaders;
 - (BOOL)loadTexture;
@@ -49,7 +51,9 @@
 @synthesize context, displayLink;
 @synthesize texture, textureSize;
 @synthesize program;
-@synthesize aPosition, aTextureCoordinate, sTexture;
+@synthesize aPosition, aTextureCoordinate;
+@synthesize uPositioningMatrix;
+@synthesize sTexture;
 
 
 - (void)awakeFromNib
@@ -192,40 +196,6 @@
     EAGLView *eaglView = (EAGLView *)self.view;
     [eaglView setFramebuffer];
     
-    // The GL screen coordinates run from (-1.0f, -1.0f) in the top left,
-    // to (1.0f, 1.0f) in the bottom right of the viewport.  
-    
-    // Work out where to place our image to get it centered in the bounds.
-    CGRect myBounds = eaglView.bounds;
-    
-    // Work out where to place the image in view points.
-    CGRect imageRect;
-    imageRect.size = self.textureSize;
-    imageRect.origin = CGPointMake(floorf((myBounds.size.width - imageRect.size.width) * 0.5f), 
-                                   floorf((myBounds.size.height - imageRect.size.height) * 0.5f));
-    
-    
-    // Scale and offset the view-points-based rectangle to get it into OpenGL
-    // viewport's coordinate space.
-    CGRect glImageRect = CGRectMake(imageRect.origin.x / (myBounds.size.width * 0.5f) - 1.0f, 
-                                    imageRect.origin.y / (myBounds.size.height * 0.5f) - 1.0f,
-                                    imageRect.size.width / (myBounds.size.width * 0.5f),
-                                    imageRect.size.height / (myBounds.size.height * 0.5f));
-    
-    const GLfloat vertexPositions[] = {
-        CGRectGetMinX(glImageRect), CGRectGetMinY(glImageRect),
-        CGRectGetMaxX(glImageRect), CGRectGetMinY(glImageRect),
-        CGRectGetMinX(glImageRect), CGRectGetMaxY(glImageRect),
-        CGRectGetMaxX(glImageRect), CGRectGetMaxY(glImageRect),
-    };
-    
-    static const GLfloat textureCoordinates[] = {
-        0.0f, 0.0f,
-        1.0f, 0.0f,
-        0.0f, 1.0f,
-        1.0f, 1.0f,
-    };
-    
     glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT);
     
@@ -234,11 +204,67 @@
         
     
     // Update attribute values.
-    glVertexAttribPointer(aPosition, 2, GL_FLOAT, 0, 0, vertexPositions);
-    glEnableVertexAttribArray(aPosition);
-    glVertexAttribPointer(aTextureCoordinate, 2, GL_FLOAT, 0, 0, textureCoordinates);
-    glEnableVertexAttribArray(aTextureCoordinate);
     
+    // A big 2 X 2 rectangle centered around 0, 0.
+    // We'll position it using a positioning matrix in the vertex shader.
+    const GLfloat vertexPositions[] = {
+        -1.0f, -1.0f,
+         1.0f, -1.0f,
+        -1.0f,  1.0f,
+         1.0f,  1.0f,
+    };
+
+    glVertexAttribPointer(self.aPosition, 2, GL_FLOAT, 0, 0, vertexPositions);
+    glEnableVertexAttribArray(self.aPosition);
+
+    // The GL texture coordinates run from (0.0f, 0.0f) in the top left,
+    // to (1.0f, 1.0f) in the bottom right of the texture, so this will use the 
+    // entire texture to cover the entire rectangle.
+    static const GLfloat textureCoordinates[] = {
+        0.0f, 0.0f,
+        1.0f, 0.0f,
+        0.0f, 1.0f,
+        1.0f, 1.0f,
+    };
+    
+    glVertexAttribPointer(self.aTextureCoordinate, 2, GL_FLOAT, 0, 0, textureCoordinates);
+    glEnableVertexAttribArray(self.aTextureCoordinate);
+    
+
+    // Work out the matrix to position the iMac quad on the screen, and rotate
+    // it.
+    CATransform3D positioningTransform = CATransform3DIdentity;
+    CGSize myBoundsSize = self.view.bounds.size;
+    CGSize myTextureSize = self.textureSize;
+    
+    // First, scale the 2-by-2 vertexPositions rectangle into the aspect ratio
+    // of the texture.  We scane the height to be correct in terms of the 
+    // width.
+    positioningTransform = CATransform3DScale(positioningTransform, 
+                                              1.0f, 
+                                              myTextureSize.height / myTextureSize.width,
+                                              1.0f);
+    
+    // Now, rotate it [around (0.0, 0.0)].  1/2 a rotation per second.
+    positioningTransform = CATransform3DRotate(positioningTransform, 
+                                               M_PI * self.displayLink.timestamp, 
+                                               0.0f, 0.0f, 1.0f);
+    
+    // Scale it up to get it to be 1:1 texture pixels to screen pixels.
+    // Remember, the screen coordinate system is two units high, and two 
+    // units wide, and so is the vertexPositions triangle strip.
+    // textureSize.width is used in both X and Y scaling because we already 
+    // scaled, before the rotation, to get the height to be in terms of the
+    // width.
+    positioningTransform = CATransform3DScale(positioningTransform, 
+                                              textureSize.width / myBoundsSize.width, 
+                                              textureSize.width / myBoundsSize.height,
+                                              1.0f);
+    
+    // Upload the matrix.
+    glUniformMatrix4fv(self.uPositioningMatrix, 1, GL_FALSE, (GLfloat *)&positioningTransform);
+    
+    // Use our iMac texture.
     glUniform1i(sTexture, 1);
     glActiveTexture(GL_TEXTURE1);
     glBindTexture(GL_TEXTURE_2D, texture);
@@ -395,6 +421,8 @@
     // Get the attribute and uniform locations from the linked program.
     self.aPosition = glGetAttribLocation(program, "aPosition");
     self.aTextureCoordinate = glGetAttribLocation(program, "aTextureCoordinate");
+    
+    self.uPositioningMatrix = glGetUniformLocation(program, "uPositioningMatrix");
     
     self.sTexture = glGetUniformLocation(program, "sTexture");
     

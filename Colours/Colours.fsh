@@ -9,7 +9,7 @@
 uniform lowp sampler2D sTexture;
 varying highp vec2 vTextureCoordinate;
 
-const lowp vec4 cBondiBlue = vec4(0.0, 0.725, 1.0, 1.0);
+varying lowp vec4 vTintColor;
 
 lowp vec4 dodgyAdHocTint(in lowp vec4 baseShadeColor, in lowp vec4 tintColor)
 {
@@ -35,5 +35,5 @@ lowp vec4 dodgyAdHocTint(in lowp vec4 baseShadeColor, in lowp vec4 tintColor)
 
 void main()
 {
-    gl_FragColor = dodgyAdHocTint(texture2D(sTexture, vTextureCoordinate), cBondiBlue);
+    gl_FragColor = dodgyAdHocTint(texture2D(sTexture, vTextureCoordinate), vTintColor);
 }
