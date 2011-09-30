@@ -27,5 +27,5 @@ void main()
     float tintPercentage = 1.0 - step(aPosition.y, 0.0);
     vTintColor = mix(cMediumGrey, cBondiBlue, tintPercentage);
     
-    gl_Position = aPosition * uPositioningMatrix;
+    gl_Position = uPositioningMatrix * aPosition;
 }

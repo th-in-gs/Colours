@@ -238,17 +238,19 @@
     CGSize myTextureSize = self.textureSize;
     
     // First, scale the 2-by-2 vertexPositions rectangle into the aspect ratio
-    // of the texture.  We scane the height to be correct in terms of the 
+    // of the texture.  We scale the height to be correct in terms of the 
     // width.
-    positioningTransform = CATransform3DScale(positioningTransform, 
-                                              1.0f, 
-                                              myTextureSize.height / myTextureSize.width,
-                                              1.0f);
+    CATransform3D correctAspectRatio = CATransform3DMakeScale(1.0f, 
+                                                              myTextureSize.height / myTextureSize.width,
+                                                              1.0f);
+    positioningTransform = CATransform3DConcat(positioningTransform, correctAspectRatio);
     
-    // Now, rotate it [around (0.0, 0.0)].  1/2 a rotation per second.
-    positioningTransform = CATransform3DRotate(positioningTransform, 
-                                               M_PI * self.displayLink.timestamp, 
-                                               0.0f, 0.0f, 1.0f);
+    // Now, rotate it.  1/2 a rotation per second. around 
+    // the Z axis (i.e. the axis pointing 'through' the screen).
+    // This will cause a rotation around (0.0, 0.0).
+    CATransform3D rotate = CATransform3DMakeRotation(M_PI * self.displayLink.timestamp, 
+                                                     0.0f, 0.0f, 1.0f);
+    positioningTransform = CATransform3DConcat(positioningTransform, rotate);
     
     // Scale it up to get it to be 1:1 texture pixels to screen pixels.
     // Remember, the screen coordinate system is two units high, and two 
@@ -256,10 +258,10 @@
     // textureSize.width is used in both X and Y scaling because we already 
     // scaled, before the rotation, to get the height to be in terms of the
     // width.
-    positioningTransform = CATransform3DScale(positioningTransform, 
-                                              textureSize.width / myBoundsSize.width, 
-                                              textureSize.width / myBoundsSize.height,
-                                              1.0f);
+    CATransform3D scaleUpToTextureSize = CATransform3DMakeScale(textureSize.width / myBoundsSize.width, 
+                                                                textureSize.width / myBoundsSize.height,
+                                                                1.0f);
+    positioningTransform = CATransform3DConcat(positioningTransform, scaleUpToTextureSize);
     
     // Upload the matrix.
     glUniformMatrix4fv(self.uPositioningMatrix, 1, GL_FALSE, (GLfloat *)&positioningTransform);
