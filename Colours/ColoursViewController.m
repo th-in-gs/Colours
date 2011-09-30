@@ -16,6 +16,14 @@
 #import <OpenGLES/ES2/glext.h>
 
 
+static const GLfloat sIMacColors[5][4] = 
+{
+    { 0.0f,   0.725f, 1.0f,   1.0f }, // Bondi Blue
+    { 0.431f, 0.063f, 1.0f,   1.0f }, // Grape
+    { 1.0f,   0.275f, 0.031f, 1.0f }, // Tangerine
+    { 0.114f, 1.0f,   0.227f, 1.0f }, // Lime
+    { 1.0f,   0.0f,   0.302f, 1.0f } // Strawberry
+};
 
 @interface ColoursViewController () 
 
@@ -31,7 +39,7 @@
 
 // Shader attribute and uniform locations.
 @property (nonatomic, assign) GLuint aPosition, aTextureCoordinate;
-@property (nonatomic, assign) GLuint uPositioningMatrix;
+@property (nonatomic, assign) GLuint uPositioningMatrix, uTintColor;
 @property (nonatomic, assign) GLuint sTexture;
 
 - (BOOL)loadShaders;
@@ -52,7 +60,7 @@
 @synthesize texture, textureSize;
 @synthesize program;
 @synthesize aPosition, aTextureCoordinate;
-@synthesize uPositioningMatrix;
+@synthesize uPositioningMatrix, uTintColor;
 @synthesize sTexture;
 
 
@@ -75,6 +83,13 @@
     
     [self loadShaders];
     [self loadTexture];
+    
+    // Enable blending - we'll alpha blend.
+    glEnable(GL_BLEND);
+    
+    // Our textures have premultiplied alpha, and (mainly as a result),
+    // the shaders output premultiplied alpha.
+    glBlendFunc(GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
     
     animating = NO;
     
@@ -230,57 +245,94 @@
     glVertexAttribPointer(self.aTextureCoordinate, 2, GL_FLOAT, 0, 0, textureCoordinates);
     glEnableVertexAttribArray(self.aTextureCoordinate);
     
+    // Use our iMac texture.
+    glUniform1i(sTexture, 1);
+    glActiveTexture(GL_TEXTURE1);
+    glBindTexture(GL_TEXTURE_2D, texture);
 
-    // Work out the matrix to position the iMac quad on the screen, and rotate
-    // it.
-    CATransform3D positioningTransform = CATransform3DIdentity;
+    // Work out the matrix to position the iMac on the screen 
+    CATransform3D staticPositioningTransform = CATransform3DIdentity;
     CGSize myBoundsSize = self.view.bounds.size;
     CGSize myTextureSize = self.textureSize;
     
-    // First, scale the 2-by-2 vertexPositions rectangle into the aspect ratio
+    // Move the iMac down from the center of the screen
+    CATransform3D moveDown = CATransform3DMakeTranslation(0.0f, -1.5f, 0.0f);
+    staticPositioningTransform = CATransform3DConcat(staticPositioningTransform, moveDown);
+
+    // Scale the 2-by-2 vertexPositions rectangle into the aspect ratio
     // of the texture.  We scale the height to be correct in terms of the 
     // width.
     CATransform3D correctAspectRatio = CATransform3DMakeScale(1.0f, 
                                                               myTextureSize.height / myTextureSize.width,
                                                               1.0f);
-    positioningTransform = CATransform3DConcat(positioningTransform, correctAspectRatio);
+    staticPositioningTransform = CATransform3DConcat(staticPositioningTransform, correctAspectRatio);
     
-    // Now, rotate it.  1/2 a rotation per second. around 
+    // Now, rotate it.  1/4 a rotation per second. around 
     // the Z axis (i.e. the axis pointing 'through' the screen).
     // This will cause a rotation around (0.0, 0.0).
-    CATransform3D rotate = CATransform3DMakeRotation(M_PI * self.displayLink.timestamp, 
+    CATransform3D rotate = CATransform3DMakeRotation((M_PI * 0.5f) * self.displayLink.timestamp, 
                                                      0.0f, 0.0f, 1.0f);
-    positioningTransform = CATransform3DConcat(positioningTransform, rotate);
+    staticPositioningTransform = CATransform3DConcat(staticPositioningTransform, rotate);
+        
     
+    // Now, the scaling to an appropriate size.
+    // We won't concatenate this to the positioning matrix yet
+    // we'll do it in the loop, after we've rotated
+    // the iMac around the center point, but we'll calculate it here
+    // because it won't vary with the loop iteration.
+
     // Scale it up to get it to be 1:1 texture pixels to screen pixels.
     // Remember, the screen coordinate system is two units high, and two 
     // units wide, and so is the vertexPositions triangle strip.
     // textureSize.width is used in both X and Y scaling because we already 
     // scaled, before the rotation, to get the height to be in terms of the
     // width.
-    CATransform3D scaleUpToTextureSize = CATransform3DMakeScale(textureSize.width / myBoundsSize.width, 
-                                                                textureSize.width / myBoundsSize.height,
-                                                                1.0f);
-    positioningTransform = CATransform3DConcat(positioningTransform, scaleUpToTextureSize);
+    CATransform3D scaleToSize = CATransform3DMakeScale(textureSize.width / myBoundsSize.width, 
+                                                       textureSize.width / myBoundsSize.height,
+                                                       1.0f);
     
-    // Upload the matrix.
-    glUniformMatrix4fv(self.uPositioningMatrix, 1, GL_FALSE, (GLfloat *)&positioningTransform);
+    // Lastly, we'll scale the whole scene up or down to fit our entire circle
+    // of iMacs on the screen (turns out this means we need to scale to fit 4
+    // iMacs across the width of the screen, so we work out the scale factor
+    // required to do that).
+    CGFloat screenScale = MAX(myBoundsSize.width / textureSize.width,
+                              myBoundsSize.height / textureSize.height);
+    CATransform3D scaleToScreen = CATransform3DMakeScale(screenScale / 4.0f, 
+                                                         screenScale / 4.0f,
+                                                         1.0f);
+    scaleToSize = CATransform3DConcat(scaleToSize, scaleToScreen);
     
-    // Use our iMac texture.
-    glUniform1i(sTexture, 1);
-    glActiveTexture(GL_TEXTURE1);
-    glBindTexture(GL_TEXTURE_2D, texture);
+    // The angle 'between' each iMac in the circle. 
+    CGFloat iMacSegmentAngle = - 2.0f * (CGFloat)M_PI / 5.0f;
     
-    // Validate program before drawing. This is a good check, but only really necessary in a debug build.
-    // DEBUG macro must be defined in your debug configurations if that's not already the case.
-#if defined(DEBUG)
-    if (![self validateProgram:program]) {
-        NSLog(@"Failed to validate program: %d", program);
-        return;
+    for(NSUInteger i = 0; i < 5; ++i) {
+        CATransform3D thisIMacPositioningTransform = staticPositioningTransform;
+
+        // Rotate this iMac into its individual place in the circle
+        CATransform3D rotateIntoPlace =  CATransform3DMakeRotation(i * iMacSegmentAngle, 0.0f, 0.0f, 1.0f);
+        thisIMacPositioningTransform = CATransform3DConcat(thisIMacPositioningTransform, rotateIntoPlace);
+        
+        // Finally scale to pixel size using the scale factor using the matrix 
+        // we calculated above.
+        thisIMacPositioningTransform = CATransform3DConcat(thisIMacPositioningTransform, scaleToSize);
+        
+        // Upload the matrix.
+        glUniformMatrix4fv(self.uPositioningMatrix, 1, GL_FALSE, (GLfloat *)&thisIMacPositioningTransform);
+        
+        // Per-iMac tint color
+        glUniform4fv(self.uTintColor, 1, sIMacColors[i]);
+        
+        // Validate program before drawing. This is a good check, but only really necessary in a debug build.
+        // DEBUG macro must be defined in your debug configurations if that's not already the case.
+    #if defined(DEBUG)
+        if (![self validateProgram:program]) {
+            NSLog(@"Failed to validate program: %d", program);
+            return;
+        }
+    #endif
+        
+        glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
     }
-#endif
-    
-    glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
     
     [eaglView presentFramebuffer];
 }
@@ -425,6 +477,7 @@
     self.aTextureCoordinate = glGetAttribLocation(program, "aTextureCoordinate");
     
     self.uPositioningMatrix = glGetUniformLocation(program, "uPositioningMatrix");
+    self.uTintColor = glGetUniformLocation(program, "uTintColor");
     
     self.sTexture = glGetUniformLocation(program, "sTexture");
     

@@ -12,6 +12,7 @@
 		7DB6E0D9142D03380067B650 /* Icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7DB6E0D5142D03380067B650 /* Icon@2x.png */; };
 		7DB6E0DA142D03380067B650 /* iTunesArtwork in Resources */ = {isa = PBXBuildFile; fileRef = 7DB6E0D6142D03380067B650 /* iTunesArtwork */; };
 		7DB6E0DC142D051E0067B650 /* iMacGrey.png in Resources */ = {isa = PBXBuildFile; fileRef = 7DB6E0DB142D051E0067B650 /* iMacGrey.png */; };
+		7DD944F71435D4ED001F0F43 /* iMacGrey~ipad.png in Resources */ = {isa = PBXBuildFile; fileRef = 7DD944F61435D4ED001F0F43 /* iMacGrey~ipad.png */; };
 		7DED0DC01431E65A008D8FBB /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DED0DBF1431E65A008D8FBB /* main.m */; };
 		7DED0E37143219AE008D8FBB /* iMacGrey@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7DED0E36143219AD008D8FBB /* iMacGrey@2x.png */; };
 		C9B7852D142CEC0A0070BEDE /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C9B7852C142CEC0A0070BEDE /* UIKit.framework */; };
@@ -37,6 +38,7 @@
 		7DB6E0D5142D03380067B650 /* Icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon@2x.png"; sourceTree = "<group>"; };
 		7DB6E0D6142D03380067B650 /* iTunesArtwork */ = {isa = PBXFileReference; lastKnownFileType = file; path = iTunesArtwork; sourceTree = "<group>"; };
 		7DB6E0DB142D051E0067B650 /* iMacGrey.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = iMacGrey.png; sourceTree = "<group>"; };
+		7DD944F61435D4ED001F0F43 /* iMacGrey~ipad.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "iMacGrey~ipad.png"; sourceTree = "<group>"; };
 		7DED0DBF1431E65A008D8FBB /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		7DED0E36143219AD008D8FBB /* iMacGrey@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "iMacGrey@2x.png"; sourceTree = "<group>"; };
 		C9B78528142CEC0A0070BEDE /* Colours.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Colours.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -85,6 +87,7 @@
 				7DB6E0D5142D03380067B650 /* Icon@2x.png */,
 				7DB6E0DB142D051E0067B650 /* iMacGrey.png */,
 				7DED0E36143219AD008D8FBB /* iMacGrey@2x.png */,
+				7DD944F61435D4ED001F0F43 /* iMacGrey~ipad.png */,
 				C9B78542142CEC0A0070BEDE /* MainWindow.xib */,
 				C9B7854F142CEC0A0070BEDE /* ColoursViewController.xib */,
 			);
@@ -207,6 +210,7 @@
 				7DB6E0DA142D03380067B650 /* iTunesArtwork in Resources */,
 				7DB6E0DC142D051E0067B650 /* iMacGrey.png in Resources */,
 				7DED0E37143219AE008D8FBB /* iMacGrey@2x.png in Resources */,
+				7DD944F71435D4ED001F0F43 /* iMacGrey~ipad.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

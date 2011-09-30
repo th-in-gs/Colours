@@ -10,12 +10,12 @@ attribute vec4 aPosition;
 attribute vec2 aTextureCoordinate;
 
 uniform mat4 uPositioningMatrix;
+uniform vec4 uTintColor;
 
 varying vec2 vTextureCoordinate;
 varying vec4 vTintColor;
 
 const vec4 cMediumGrey = vec4(0.5, 0.5, 0.5, 1.0);
-const vec4 cBondiBlue = vec4(0.0, 0.725, 1.0, 1.0);
 
 void main()
 {
@@ -25,7 +25,7 @@ void main()
     // 100% tint for vertexes with y < 0, 
     // 0% for vertexes with y > 1.
     float tintPercentage = 1.0 - step(aPosition.y, 0.0);
-    vTintColor = mix(cMediumGrey, cBondiBlue, tintPercentage);
+    vTintColor = mix(cMediumGrey, uTintColor, tintPercentage);
     
     gl_Position = uPositioningMatrix * aPosition;
 }
