@@ -13,8 +13,7 @@
 #import <OpenGLES/ES2/glext.h>
 
 
-@interface EAGLView (){
-@private
+@interface EAGLView () {
     // The pixel dimensions of the CAEAGLLayer.
     GLint framebufferWidth;
     GLint framebufferHeight;
@@ -25,6 +24,7 @@
 
 - (void)createFramebuffer;
 - (void)deleteFramebuffer;
+
 @end
 
 @implementation EAGLView
@@ -38,17 +38,13 @@
 }
 
 //The EAGL view is stored in the nib file. When it's unarchived it's sent -initWithCoder:.
-- (id)initWithCoder:(NSCoder*)coder
+- (instancetype)initWithCoder:(NSCoder*)coder
 {
     self = [super initWithCoder:coder];
 	if (self) {
         CAEAGLLayer *eaglLayer = (CAEAGLLayer *)self.layer;
-        
-        eaglLayer.opaque = TRUE;
-        eaglLayer.drawableProperties = [NSDictionary dictionaryWithObjectsAndKeys:
-                                        [NSNumber numberWithBool:FALSE], kEAGLDrawablePropertyRetainedBacking,
-                                        kEAGLColorFormatRGBA8, kEAGLDrawablePropertyColorFormat,
-                                        nil];
+        eaglLayer.drawableProperties = @{ kEAGLDrawablePropertyRetainedBacking: @NO,
+                                          kEAGLDrawablePropertyColorFormat: kEAGLColorFormatRGBA8 };
     }
     
     return self;
@@ -56,10 +52,7 @@
 
 - (void)dealloc
 {
-    [self deleteFramebuffer];    
-    [context release];
-    
-    [super dealloc];
+    [self deleteFramebuffer];
 }
 
 - (void)setContext:(EAGLContext *)newContext
@@ -67,8 +60,7 @@
     if (context != newContext) {
         [self deleteFramebuffer];
         
-        [context release];
-        context = [newContext retain];
+        context = newContext;
         
         [EAGLContext setCurrentContext:nil];
     }
@@ -78,7 +70,7 @@
 {
     if (context && !defaultFramebuffer) {
         // Use our window's screen's retina scale factor.
-        [self setContentScaleFactor:[self.window screen].scale];
+        self.contentScaleFactor = self.window.screen.scale;
 
         [EAGLContext setCurrentContext:context];
         
@@ -150,6 +142,7 @@
 {
     // The framebuffer will be re-created at the beginning of the next setFramebuffer method call.
     [self deleteFramebuffer];
+    [EAGLContext setCurrentContext:nil];
 }
 
 @end

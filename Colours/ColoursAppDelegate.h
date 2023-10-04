@@ -10,10 +10,9 @@
 
 @class ColoursViewController;
 
-@interface ColoursAppDelegate : NSObject <UIApplicationDelegate> {}
+@interface ColoursAppDelegate : NSObject <UIApplicationDelegate>
 
-@property (nonatomic, retain) IBOutlet UIWindow *window;
-
-@property (nonatomic, retain) IBOutlet ColoursViewController *viewController;
+@property (nonatomic, strong) IBOutlet UIWindow *window;
+@property (nonatomic, strong) IBOutlet ColoursViewController *viewController;
 
 @end

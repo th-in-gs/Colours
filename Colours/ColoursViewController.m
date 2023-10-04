@@ -27,8 +27,8 @@ static const GLfloat sIMacColors[5][4] =
 
 @interface ColoursViewController () 
 
-@property (nonatomic, retain) EAGLContext *context;
-@property (nonatomic, assign) CADisplayLink *displayLink;
+@property (nonatomic, strong) EAGLContext *context;
+@property (nonatomic, weak) CADisplayLink *displayLink;
 
 // Our texture
 @property (nonatomic, assign) GLuint texture;
@@ -42,12 +42,6 @@ static const GLfloat sIMacColors[5][4] =
 @property (nonatomic, assign) GLuint uPositioningMatrix, uTintColor;
 @property (nonatomic, assign) GLuint sTexture;
 
-- (BOOL)loadShaders;
-- (BOOL)loadTexture;
-- (BOOL)compileShader:(GLuint *)shader type:(GLenum)type URL:(NSURL *)fileURL;
-- (BOOL)linkProgram:(GLuint)prog;
-- (BOOL)validateProgram:(GLuint)prog;
-
 @end
 
 
@@ -55,7 +49,7 @@ static const GLfloat sIMacColors[5][4] =
 @implementation ColoursViewController
 
 
-@synthesize animating, animationFrameInterval;
+@synthesize animating, animationFPS;
 @synthesize context, displayLink;
 @synthesize texture, textureSize;
 @synthesize program;
@@ -66,6 +60,8 @@ static const GLfloat sIMacColors[5][4] =
 
 - (void)awakeFromNib
 {
+    [super awakeFromNib];
+    
     EAGLContext *aContext = [[EAGLContext alloc] initWithAPI:kEAGLRenderingAPIOpenGLES2];
     
     if (!aContext) {
@@ -75,10 +71,9 @@ static const GLfloat sIMacColors[5][4] =
     }
     
 	self.context = aContext;
-	[aContext release];
 	
     EAGLView *myEaglView = (EAGLView *)self.view;
-    [myEaglView setContext:context];
+    myEaglView.context = context;
     [myEaglView setFramebuffer];
     
     [self loadShaders];
@@ -93,8 +88,8 @@ static const GLfloat sIMacColors[5][4] =
     
     animating = NO;
     
-    // Default 30 fps - see comment in setAnimationFrameInterval:
-    animationFrameInterval = 2;
+    // Default 60 fps.
+    animationFPS = 60;
 }
 
 
@@ -112,26 +107,14 @@ static const GLfloat sIMacColors[5][4] =
     if ([EAGLContext currentContext] == context) {
         [EAGLContext setCurrentContext:nil];
     }
-    [context release];
-    
-    [super dealloc];
 }
 
 
-- (void)didReceiveMemoryWarning
-{
-    // Releases the view if it doesn't have a superview.
-    [super didReceiveMemoryWarning];
-    
-    // Release any cached data, images, etc. that aren't in use.
-}
-
-
-- (void)viewWillAppear:(BOOL)animated
+- (void)viewDidAppear:(BOOL)animated
 {
     [self startAnimation];
     
-    [super viewWillAppear:animated];
+    [super viewDidAppear:animated];
 }
 
 
@@ -143,51 +126,12 @@ static const GLfloat sIMacColors[5][4] =
 }
 
 
-- (void)viewDidUnload
-{
-	[super viewDidUnload];
-	
-    if (program) {
-        glDeleteProgram(program);
-        program = 0;
-    }
-
-    // Tear down context.
-    if ([EAGLContext currentContext] == context)
-        [EAGLContext setCurrentContext:nil];
-	self.context = nil;	
-}
-
-
-- (NSInteger)animationFrameInterval
-{
-    return animationFrameInterval;
-}
-
-
-- (void)setAnimationFrameInterval:(NSInteger)frameInterval
-{
-	 // Frame interval defines how many display frames must pass between each time the display link fires.
-	 // The display link will only fire 30 times a second when the frame internal is two on a display that refreshes 60 times a second. 
-     // The default frame interval setting of 2 will fire 30 times a second when the display refreshes at 60 times a second. 
-     // A frame interval setting of less than one results in undefined behavior.
-    if (frameInterval >= 1) {
-        animationFrameInterval = frameInterval;
-        
-        if (animating) {
-            [self stopAnimation];
-            [self startAnimation];
-        }
-    }
-}
-
-
 - (void)startAnimation
 {
     if (!animating) {
-        CADisplayLink *aDisplayLink = [[UIScreen mainScreen] displayLinkWithTarget:self selector:@selector(drawFrame)];
-        [aDisplayLink setFrameInterval:animationFrameInterval];
-        [aDisplayLink addToRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
+        CADisplayLink *aDisplayLink = [self.view.window.screen displayLinkWithTarget:self selector:@selector(drawFrame)];
+        aDisplayLink.preferredFramesPerSecond = animationFPS;
+        [aDisplayLink addToRunLoop:[NSRunLoop currentRunLoop] forMode:NSRunLoopCommonModes];
         self.displayLink = aDisplayLink;
         
         animating = YES;
@@ -287,7 +231,7 @@ static const GLfloat sIMacColors[5][4] =
     // textureSize.width is used in both X and Y scaling because we already 
     // scaled, before the rotation, to get the height to be in terms of the
     // width.
-    CATransform3D scaleToSize = CATransform3DMakeScale(textureSize.width / myBoundsSize.width, 
+    CATransform3D scaleToSize = CATransform3DMakeScale(textureSize.width / myBoundsSize.width,
                                                        textureSize.width / myBoundsSize.height,
                                                        1.0f);
     
@@ -295,9 +239,9 @@ static const GLfloat sIMacColors[5][4] =
     // of iMacs on the screen (turns out this means we need to scale to fit 4
     // iMacs across the width of the screen, so we work out the scale factor
     // required to do that).
-    CGFloat screenScale = MAX(myBoundsSize.width / textureSize.width,
+    CGFloat screenScale = MIN(myBoundsSize.width / textureSize.width,
                               myBoundsSize.height / textureSize.height);
-    CATransform3D scaleToScreen = CATransform3DMakeScale(screenScale / 4.0f, 
+    CATransform3D scaleToScreen = CATransform3DMakeScale(screenScale / 4.0f,
                                                          screenScale / 4.0f,
                                                          1.0f);
     scaleToSize = CATransform3DConcat(scaleToSize, scaleToScreen);
@@ -317,7 +261,9 @@ static const GLfloat sIMacColors[5][4] =
         thisIMacPositioningTransform = CATransform3DConcat(thisIMacPositioningTransform, scaleToSize);
         
         // Upload the matrix.
-        glUniformMatrix4fv(self.uPositioningMatrix, 1, GL_FALSE, (GLfloat *)&thisIMacPositioningTransform);
+        // In today's 64-bit-CGFloat world, we need to convert from CGFloat to
+        // GLfloat, unfortunately.
+        glUniformMatrix4fv(self.uPositioningMatrix, 1, GL_FALSE, (GLfloat[]){thisIMacPositioningTransform.m11, thisIMacPositioningTransform.m12, thisIMacPositioningTransform.m13, thisIMacPositioningTransform.m14, thisIMacPositioningTransform.m21, thisIMacPositioningTransform.m22, thisIMacPositioningTransform.m23, thisIMacPositioningTransform.m24, thisIMacPositioningTransform.m31, thisIMacPositioningTransform.m32, thisIMacPositioningTransform.m33, thisIMacPositioningTransform.m34, thisIMacPositioningTransform.m41, thisIMacPositioningTransform.m42, thisIMacPositioningTransform.m43, thisIMacPositioningTransform.m44});
         
         // Per-iMac tint color
         glUniform4fv(self.uTintColor, 1, sIMacColors[i]);
@@ -350,7 +296,7 @@ static const GLfloat sIMacColors[5][4] =
     }
     
     const GLchar *shaderSource = source.bytes;
-    const GLint shaderSourceLength = source.length;
+    const GLint shaderSourceLength = (GLint)source.length;
     
     *shader = glCreateShader(type);
     glShaderSource(*shader, 1, &shaderSource, &shaderSourceLength);

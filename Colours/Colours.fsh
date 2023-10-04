@@ -26,7 +26,9 @@ lowp vec4 dodgyAdHocTint(in lowp vec4 baseShadeColor, in lowp vec4 tintColor)
     // Percentage of tint color to use.
     // 1 when the brightness is 0.5, ramping down to 0 when the brightness
     // 0 or 1.
-    lowp float mixPercentage = (-abs(brightness - 0.5)) * 2.0 + 1.0;
+    // Note that the '/ 0.5' is really "* 2" - but 2.0 is not representable
+    // as a lowp float (lowp float range is -2.0 to 2.0, _non_ inclusive)
+    lowp float mixPercentage = (-abs(brightness - 0.5)) / 0.5 + 1.0;
     
     // Mix the base with the tint.
     return mix(baseShadeColor, tintColor, mixPercentage);
