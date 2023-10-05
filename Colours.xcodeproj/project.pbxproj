@@ -10,7 +10,7 @@
 		7D18A13E2ACDD31E00196801 /* ColoursMetalView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D18A13D2ACDD31E00196801 /* ColoursMetalView.m */; };
 		7D31833A2ACDD94B004A0506 /* ColoursNotificationCenterAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D3183392ACDD94B004A0506 /* ColoursNotificationCenterAdditions.m */; };
 		7D76DCC82ACDF71000AD9308 /* Metal.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7D76DCC72ACDF71000AD9308 /* Metal.framework */; };
-		7D940ED72ACCDE2B005DCE9D /* MainWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7D940ED82ACCDE2B005DCE9D /* MainWindow.xib */; };
+		7D859DE12ACF2DE000295CA3 /* ColoursSceneDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D859DE02ACF2DE000295CA3 /* ColoursSceneDelegate.m */; };
 		7D940ED92ACCDE2F005DCE9D /* ColoursViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7D940EDA2ACCDE2F005DCE9D /* ColoursViewController.xib */; };
 		7DD69C0D2ACCEF8E0026661E /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7DD69C0C2ACCEF8E0026661E /* LaunchScreen.xib */; };
 		7DD69C0F2ACCEFF90026661E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7DD69C0E2ACCEFF90026661E /* Assets.xcassets */; };
@@ -19,7 +19,6 @@
 		C9B7852F142CEC0A0070BEDE /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C9B7852E142CEC0A0070BEDE /* Foundation.framework */; };
 		C9B78531142CEC0A0070BEDE /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C9B78530142CEC0A0070BEDE /* CoreGraphics.framework */; };
 		C9B78533142CEC0A0070BEDE /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C9B78532142CEC0A0070BEDE /* QuartzCore.framework */; };
-		C9B78541142CEC0A0070BEDE /* ColoursAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = C9B78540142CEC0A0070BEDE /* ColoursAppDelegate.m */; };
 		C9B78546142CEC0A0070BEDE /* ColoursVertex.metal in Resources */ = {isa = PBXBuildFile; fileRef = C9B78545142CEC0A0070BEDE /* ColoursVertex.metal */; };
 		C9B78548142CEC0A0070BEDE /* ColoursFragment.metal in Resources */ = {isa = PBXBuildFile; fileRef = C9B78547142CEC0A0070BEDE /* ColoursFragment.metal */; };
 		C9B7854E142CEC0A0070BEDE /* ColoursViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C9B7854D142CEC0A0070BEDE /* ColoursViewController.m */; };
@@ -32,10 +31,11 @@
 		7D3183392ACDD94B004A0506 /* ColoursNotificationCenterAdditions.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ColoursNotificationCenterAdditions.m; sourceTree = "<group>"; };
 		7D76DCC72ACDF71000AD9308 /* Metal.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Metal.framework; path = System/Library/Frameworks/Metal.framework; sourceTree = SDKROOT; };
 		7D76DCC92ACE0B3A00AD9308 /* ColoursShaders.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ColoursShaders.h; sourceTree = "<group>"; };
-		7D9023FC2ACE3C41007D5AB9 /* Colours.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Colours.entitlements; sourceTree = "<group>"; };
-		7D940ED82ACCDE2B005DCE9D /* MainWindow.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = MainWindow.xib; sourceTree = "<group>"; };
-		7D940EDA2ACCDE2F005DCE9D /* ColoursViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ColoursViewController.xib; sourceTree = "<group>"; };
 		7DB6E0D0142CFF770067B650 /* Colours-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "Colours-Info.plist"; sourceTree = "<group>"; };
+		7D859DDF2ACF2DE000295CA3 /* ColoursSceneDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ColoursSceneDelegate.h; sourceTree = "<group>"; };
+		7D859DE02ACF2DE000295CA3 /* ColoursSceneDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ColoursSceneDelegate.m; sourceTree = "<group>"; };
+		7D9023FC2ACE3C41007D5AB9 /* Colours.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Colours.entitlements; sourceTree = "<group>"; };
+		7D940EDA2ACCDE2F005DCE9D /* ColoursViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ColoursViewController.xib; sourceTree = "<group>"; };
 		7DD69C0C2ACCEF8E0026661E /* LaunchScreen.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = LaunchScreen.xib; sourceTree = "<group>"; };
 		7DD69C0E2ACCEFF90026661E /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		7DED0DBF1431E65A008D8FBB /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -44,9 +44,6 @@
 		C9B7852E142CEC0A0070BEDE /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		C9B78530142CEC0A0070BEDE /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 		C9B78532142CEC0A0070BEDE /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
-		C9B78534142CEC0A0070BEDE /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = System/Library/Frameworks/OpenGLES.framework; sourceTree = SDKROOT; };
-		C9B7853F142CEC0A0070BEDE /* ColoursAppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ColoursAppDelegate.h; sourceTree = "<group>"; };
-		C9B78540142CEC0A0070BEDE /* ColoursAppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ColoursAppDelegate.m; sourceTree = "<group>"; };
 		C9B78545142CEC0A0070BEDE /* ColoursVertex.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = ColoursVertex.metal; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.glsl; };
 		C9B78547142CEC0A0070BEDE /* ColoursFragment.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = ColoursFragment.metal; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.glsl; };
 		C9B7854C142CEC0A0070BEDE /* ColoursViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ColoursViewController.h; sourceTree = "<group>"; };
@@ -75,7 +72,6 @@
 				7DB6E0D0142CFF770067B650 /* Colours-Info.plist */,
 				7DD69C0E2ACCEFF90026661E /* Assets.xcassets */,
 				7DD69C0C2ACCEF8E0026661E /* LaunchScreen.xib */,
-				7D940ED82ACCDE2B005DCE9D /* MainWindow.xib */,
 				7D940EDA2ACCDE2F005DCE9D /* ColoursViewController.xib */,
 			);
 			path = Resources;
@@ -114,7 +110,6 @@
 				C9B7852E142CEC0A0070BEDE /* Foundation.framework */,
 				C9B78530142CEC0A0070BEDE /* CoreGraphics.framework */,
 				C9B78532142CEC0A0070BEDE /* QuartzCore.framework */,
-				C9B78534142CEC0A0070BEDE /* OpenGLES.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -125,13 +120,13 @@
 				7D9023FC2ACE3C41007D5AB9 /* Colours.entitlements */,
 				C9B7854C142CEC0A0070BEDE /* ColoursViewController.h */,
 				C9B7854D142CEC0A0070BEDE /* ColoursViewController.m */,
+				7D18A13C2ACDD31E00196801 /* ColoursMetalView.h */,
+				7D18A13D2ACDD31E00196801 /* ColoursMetalView.m */,
 				7D76DCC92ACE0B3A00AD9308 /* ColoursShaders.h */,
 				C9B78545142CEC0A0070BEDE /* ColoursVertex.metal */,
 				C9B78547142CEC0A0070BEDE /* ColoursFragment.metal */,
-				C9B7853F142CEC0A0070BEDE /* ColoursAppDelegate.h */,
-				C9B78540142CEC0A0070BEDE /* ColoursAppDelegate.m */,
-				7D18A13C2ACDD31E00196801 /* ColoursMetalView.h */,
-				7D18A13D2ACDD31E00196801 /* ColoursMetalView.m */,
+				7D859DDF2ACF2DE000295CA3 /* ColoursSceneDelegate.h */,
+				7D859DE02ACF2DE000295CA3 /* ColoursSceneDelegate.m */,
 				7D3183382ACDD94B004A0506 /* ColoursNotificationCenterAdditions.h */,
 				7D3183392ACDD94B004A0506 /* ColoursNotificationCenterAdditions.m */,
 				7DED0DBE1431E65A008D8FBB /* Other Sources */,
@@ -192,7 +187,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				7D940ED72ACCDE2B005DCE9D /* MainWindow.xib in Resources */,
 				C9B78546142CEC0A0070BEDE /* ColoursVertex.metal in Resources */,
 				C9B78548142CEC0A0070BEDE /* ColoursFragment.metal in Resources */,
 				7D940ED92ACCDE2F005DCE9D /* ColoursViewController.xib in Resources */,
@@ -208,7 +202,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				C9B78541142CEC0A0070BEDE /* ColoursAppDelegate.m in Sources */,
+				7D859DE12ACF2DE000295CA3 /* ColoursSceneDelegate.m in Sources */,
 				7D18A13E2ACDD31E00196801 /* ColoursMetalView.m in Sources */,
 				C9B7854E142CEC0A0070BEDE /* ColoursViewController.m in Sources */,
 				7DED0DC01431E65A008D8FBB /* main.m in Sources */,
@@ -310,19 +304,28 @@
 				CLANG_ENABLE_OBJC_WEAK = YES;
 				CODE_SIGN_ENTITLEMENTS = Colours/Colours.entitlements;
 				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = M6J2656Z2Y;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"$(inherited)",
 					"GLES_SILENCE_DEPRECATION=1",
 				);
+				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "Colours/Resources/Colours-Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = "${PRODUCT_NAME}";
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen.xib;
+				INFOPLIST_KEY_UIStatusBarHidden = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortraitUpsideDown";
+				MARKETING_VERSION = 1.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				PRODUCT_BUNDLE_IDENTIFIER = "gs.ingsmadeoutofotherthin.th.${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = YES;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = "1,2,6";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -335,18 +338,27 @@
 				CLANG_ENABLE_OBJC_WEAK = YES;
 				CODE_SIGN_ENTITLEMENTS = Colours/Colours.entitlements;
 				COPY_PHASE_STRIP = YES;
+				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = M6J2656Z2Y;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"$(inherited)",
 					"GLES_SILENCE_DEPRECATION=1",
 				);
+				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "Colours/Resources/Colours-Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = "${PRODUCT_NAME}";
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen.xib;
+				INFOPLIST_KEY_UIStatusBarHidden = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortraitUpsideDown";
+				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "gs.ingsmadeoutofotherthin.th.${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = YES;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = "1,2,6";
 				VALIDATE_PRODUCT = YES;
 				WRAPPER_EXTENSION = app;
 			};
