@@ -32,6 +32,7 @@
 		7D3183392ACDD94B004A0506 /* ColoursNotificationCenterAdditions.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ColoursNotificationCenterAdditions.m; sourceTree = "<group>"; };
 		7D76DCC72ACDF71000AD9308 /* Metal.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Metal.framework; path = System/Library/Frameworks/Metal.framework; sourceTree = SDKROOT; };
 		7D76DCC92ACE0B3A00AD9308 /* ColoursShaders.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ColoursShaders.h; sourceTree = "<group>"; };
+		7D9023FC2ACE3C41007D5AB9 /* Colours.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Colours.entitlements; sourceTree = "<group>"; };
 		7D940ED82ACCDE2B005DCE9D /* MainWindow.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = MainWindow.xib; sourceTree = "<group>"; };
 		7D940EDA2ACCDE2F005DCE9D /* ColoursViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ColoursViewController.xib; sourceTree = "<group>"; };
 		7DB6E0D0142CFF770067B650 /* Colours-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "Colours-Info.plist"; sourceTree = "<group>"; };
@@ -121,6 +122,7 @@
 		C9B78536142CEC0A0070BEDE /* Colours */ = {
 			isa = PBXGroup;
 			children = (
+				7D9023FC2ACE3C41007D5AB9 /* Colours.entitlements */,
 				C9B7854C142CEC0A0070BEDE /* ColoursViewController.h */,
 				C9B7854D142CEC0A0070BEDE /* ColoursViewController.m */,
 				7D76DCC92ACE0B3A00AD9308 /* ColoursShaders.h */,
@@ -306,6 +308,7 @@
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_OBJC_WEAK = YES;
+				CODE_SIGN_ENTITLEMENTS = Colours/Colours.entitlements;
 				COPY_PHASE_STRIP = NO;
 				DEVELOPMENT_TEAM = M6J2656Z2Y;
 				GCC_PREPROCESSOR_DEFINITIONS = (
@@ -316,6 +319,9 @@
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				PRODUCT_BUNDLE_IDENTIFIER = "gs.ingsmadeoutofotherthin.th.${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = YES;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				WRAPPER_EXTENSION = app;
 			};
@@ -327,6 +333,7 @@
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_OBJC_WEAK = YES;
+				CODE_SIGN_ENTITLEMENTS = Colours/Colours.entitlements;
 				COPY_PHASE_STRIP = YES;
 				DEVELOPMENT_TEAM = M6J2656Z2Y;
 				GCC_PREPROCESSOR_DEFINITIONS = (
@@ -336,6 +343,9 @@
 				INFOPLIST_FILE = "Colours/Resources/Colours-Info.plist";
 				PRODUCT_BUNDLE_IDENTIFIER = "gs.ingsmadeoutofotherthin.th.${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = YES;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
 				WRAPPER_EXTENSION = app;

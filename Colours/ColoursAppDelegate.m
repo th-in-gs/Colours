@@ -7,9 +7,6 @@
 //
 
 #import "ColoursAppDelegate.h"
-
-#import "EAGLView.h"
-
 #import "ColoursViewController.h"
 
 @implementation ColoursAppDelegate
