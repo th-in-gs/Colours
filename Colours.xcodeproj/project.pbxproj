@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		7D18A13E2ACDD31E00196801 /* ColoursMetalView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D18A13D2ACDD31E00196801 /* ColoursMetalView.m */; };
+		7D31833A2ACDD94B004A0506 /* ColoursNotificationCenterAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D3183392ACDD94B004A0506 /* ColoursNotificationCenterAdditions.m */; };
+		7D76DCC82ACDF71000AD9308 /* Metal.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7D76DCC72ACDF71000AD9308 /* Metal.framework */; };
 		7D940ED72ACCDE2B005DCE9D /* MainWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7D940ED82ACCDE2B005DCE9D /* MainWindow.xib */; };
 		7D940ED92ACCDE2F005DCE9D /* ColoursViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7D940EDA2ACCDE2F005DCE9D /* ColoursViewController.xib */; };
 		7DD69C0D2ACCEF8E0026661E /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7DD69C0C2ACCEF8E0026661E /* LaunchScreen.xib */; };
@@ -16,15 +19,19 @@
 		C9B7852F142CEC0A0070BEDE /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C9B7852E142CEC0A0070BEDE /* Foundation.framework */; };
 		C9B78531142CEC0A0070BEDE /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C9B78530142CEC0A0070BEDE /* CoreGraphics.framework */; };
 		C9B78533142CEC0A0070BEDE /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C9B78532142CEC0A0070BEDE /* QuartzCore.framework */; };
-		C9B78535142CEC0A0070BEDE /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C9B78534142CEC0A0070BEDE /* OpenGLES.framework */; };
 		C9B78541142CEC0A0070BEDE /* ColoursAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = C9B78540142CEC0A0070BEDE /* ColoursAppDelegate.m */; };
-		C9B78546142CEC0A0070BEDE /* Colours.vsh in Resources */ = {isa = PBXBuildFile; fileRef = C9B78545142CEC0A0070BEDE /* Colours.vsh */; };
-		C9B78548142CEC0A0070BEDE /* Colours.fsh in Resources */ = {isa = PBXBuildFile; fileRef = C9B78547142CEC0A0070BEDE /* Colours.fsh */; };
-		C9B7854B142CEC0A0070BEDE /* EAGLView.m in Sources */ = {isa = PBXBuildFile; fileRef = C9B7854A142CEC0A0070BEDE /* EAGLView.m */; };
+		C9B78546142CEC0A0070BEDE /* ColoursVertex.metal in Resources */ = {isa = PBXBuildFile; fileRef = C9B78545142CEC0A0070BEDE /* ColoursVertex.metal */; };
+		C9B78548142CEC0A0070BEDE /* ColoursFragment.metal in Resources */ = {isa = PBXBuildFile; fileRef = C9B78547142CEC0A0070BEDE /* ColoursFragment.metal */; };
 		C9B7854E142CEC0A0070BEDE /* ColoursViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C9B7854D142CEC0A0070BEDE /* ColoursViewController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		7D18A13C2ACDD31E00196801 /* ColoursMetalView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ColoursMetalView.h; sourceTree = "<group>"; };
+		7D18A13D2ACDD31E00196801 /* ColoursMetalView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ColoursMetalView.m; sourceTree = "<group>"; };
+		7D3183382ACDD94B004A0506 /* ColoursNotificationCenterAdditions.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ColoursNotificationCenterAdditions.h; sourceTree = "<group>"; };
+		7D3183392ACDD94B004A0506 /* ColoursNotificationCenterAdditions.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ColoursNotificationCenterAdditions.m; sourceTree = "<group>"; };
+		7D76DCC72ACDF71000AD9308 /* Metal.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Metal.framework; path = System/Library/Frameworks/Metal.framework; sourceTree = SDKROOT; };
+		7D76DCC92ACE0B3A00AD9308 /* ColoursShaders.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ColoursShaders.h; sourceTree = "<group>"; };
 		7D940ED82ACCDE2B005DCE9D /* MainWindow.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = MainWindow.xib; sourceTree = "<group>"; };
 		7D940EDA2ACCDE2F005DCE9D /* ColoursViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ColoursViewController.xib; sourceTree = "<group>"; };
 		7DB6E0D0142CFF770067B650 /* Colours-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "Colours-Info.plist"; sourceTree = "<group>"; };
@@ -39,10 +46,8 @@
 		C9B78534142CEC0A0070BEDE /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = System/Library/Frameworks/OpenGLES.framework; sourceTree = SDKROOT; };
 		C9B7853F142CEC0A0070BEDE /* ColoursAppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ColoursAppDelegate.h; sourceTree = "<group>"; };
 		C9B78540142CEC0A0070BEDE /* ColoursAppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ColoursAppDelegate.m; sourceTree = "<group>"; };
-		C9B78545142CEC0A0070BEDE /* Colours.vsh */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.glsl; path = Colours.vsh; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.glsl; };
-		C9B78547142CEC0A0070BEDE /* Colours.fsh */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.glsl; path = Colours.fsh; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.glsl; };
-		C9B78549142CEC0A0070BEDE /* EAGLView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EAGLView.h; sourceTree = "<group>"; };
-		C9B7854A142CEC0A0070BEDE /* EAGLView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = EAGLView.m; sourceTree = "<group>"; };
+		C9B78545142CEC0A0070BEDE /* ColoursVertex.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = ColoursVertex.metal; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.glsl; };
+		C9B78547142CEC0A0070BEDE /* ColoursFragment.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = ColoursFragment.metal; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.glsl; };
 		C9B7854C142CEC0A0070BEDE /* ColoursViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ColoursViewController.h; sourceTree = "<group>"; };
 		C9B7854D142CEC0A0070BEDE /* ColoursViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ColoursViewController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -52,11 +57,11 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7D76DCC82ACDF71000AD9308 /* Metal.framework in Frameworks */,
 				C9B7852D142CEC0A0070BEDE /* UIKit.framework in Frameworks */,
 				C9B7852F142CEC0A0070BEDE /* Foundation.framework in Frameworks */,
 				C9B78531142CEC0A0070BEDE /* CoreGraphics.framework in Frameworks */,
 				C9B78533142CEC0A0070BEDE /* QuartzCore.framework in Frameworks */,
-				C9B78535142CEC0A0070BEDE /* OpenGLES.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -103,6 +108,7 @@
 		C9B7852B142CEC0A0070BEDE /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				7D76DCC72ACDF71000AD9308 /* Metal.framework */,
 				C9B7852C142CEC0A0070BEDE /* UIKit.framework */,
 				C9B7852E142CEC0A0070BEDE /* Foundation.framework */,
 				C9B78530142CEC0A0070BEDE /* CoreGraphics.framework */,
@@ -117,12 +123,15 @@
 			children = (
 				C9B7854C142CEC0A0070BEDE /* ColoursViewController.h */,
 				C9B7854D142CEC0A0070BEDE /* ColoursViewController.m */,
-				C9B78545142CEC0A0070BEDE /* Colours.vsh */,
-				C9B78547142CEC0A0070BEDE /* Colours.fsh */,
+				7D76DCC92ACE0B3A00AD9308 /* ColoursShaders.h */,
+				C9B78545142CEC0A0070BEDE /* ColoursVertex.metal */,
+				C9B78547142CEC0A0070BEDE /* ColoursFragment.metal */,
 				C9B7853F142CEC0A0070BEDE /* ColoursAppDelegate.h */,
 				C9B78540142CEC0A0070BEDE /* ColoursAppDelegate.m */,
-				C9B78549142CEC0A0070BEDE /* EAGLView.h */,
-				C9B7854A142CEC0A0070BEDE /* EAGLView.m */,
+				7D18A13C2ACDD31E00196801 /* ColoursMetalView.h */,
+				7D18A13D2ACDD31E00196801 /* ColoursMetalView.m */,
+				7D3183382ACDD94B004A0506 /* ColoursNotificationCenterAdditions.h */,
+				7D3183392ACDD94B004A0506 /* ColoursNotificationCenterAdditions.m */,
 				7DED0DBE1431E65A008D8FBB /* Other Sources */,
 				7DB6E0CE142CFEFA0067B650 /* Resources */,
 			);
@@ -182,8 +191,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				7D940ED72ACCDE2B005DCE9D /* MainWindow.xib in Resources */,
-				C9B78546142CEC0A0070BEDE /* Colours.vsh in Resources */,
-				C9B78548142CEC0A0070BEDE /* Colours.fsh in Resources */,
+				C9B78546142CEC0A0070BEDE /* ColoursVertex.metal in Resources */,
+				C9B78548142CEC0A0070BEDE /* ColoursFragment.metal in Resources */,
 				7D940ED92ACCDE2F005DCE9D /* ColoursViewController.xib in Resources */,
 				7DD69C0F2ACCEFF90026661E /* Assets.xcassets in Resources */,
 				7DD69C0D2ACCEF8E0026661E /* LaunchScreen.xib in Resources */,
@@ -198,9 +207,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				C9B78541142CEC0A0070BEDE /* ColoursAppDelegate.m in Sources */,
-				C9B7854B142CEC0A0070BEDE /* EAGLView.m in Sources */,
+				7D18A13E2ACDD31E00196801 /* ColoursMetalView.m in Sources */,
 				C9B7854E142CEC0A0070BEDE /* ColoursViewController.m in Sources */,
 				7DED0DC01431E65A008D8FBB /* main.m in Sources */,
+				7D31833A2ACDD94B004A0506 /* ColoursNotificationCenterAdditions.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -303,6 +313,7 @@
 					"GLES_SILENCE_DEPRECATION=1",
 				);
 				INFOPLIST_FILE = "Colours/Resources/Colours-Info.plist";
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				PRODUCT_BUNDLE_IDENTIFIER = "gs.ingsmadeoutofotherthin.th.${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TARGETED_DEVICE_FAMILY = "1,2";

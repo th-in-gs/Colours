@@ -11,7 +11,6 @@
 @interface ColoursViewController : UIViewController 
 
 @property (readonly, nonatomic, getter=isAnimating) BOOL animating;
-@property (nonatomic) NSInteger animationFPS;
 
 - (void)startAnimation;
 - (void)stopAnimation;

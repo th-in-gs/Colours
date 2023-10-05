@@ -7,16 +7,11 @@
 //
 
 #import "ColoursViewController.h"
-#import "EAGLView.h"
+#import "ColoursMetalView.h"
 
-#import <QuartzCore/QuartzCore.h>
+#import <simd/simd.h>
 
-#import <OpenGLES/EAGL.h>
-#import <OpenGLES/ES2/gl.h>
-#import <OpenGLES/ES2/glext.h>
-
-
-static const GLfloat sIMacColors[5][4] = 
+static const float sIMacColors[5][4] =
 {
     { 0.0f,   0.725f, 1.0f,   1.0f }, // Bondi Blue
     { 0.431f, 0.063f, 1.0f,   1.0f }, // Grape
@@ -25,90 +20,42 @@ static const GLfloat sIMacColors[5][4] =
     { 1.0f,   0.0f,   0.302f, 1.0f } // Strawberry
 };
 
-@interface ColoursViewController () 
+@interface ColoursViewController () <ColoursMetalViewDelegate>
 
-@property (nonatomic, strong) EAGLContext *context;
-@property (nonatomic, weak) CADisplayLink *displayLink;
-
-// Our texture
-@property (nonatomic, assign) GLuint texture;
-@property (nonatomic, assign) CGSize textureSize;
-
-// Our compiled shader program
-@property (nonatomic, assign) GLuint program;
-
-// Shader attribute and uniform locations.
-@property (nonatomic, assign) GLuint aPosition, aTextureCoordinate;
-@property (nonatomic, assign) GLuint uPositioningMatrix, uTintColor;
-@property (nonatomic, assign) GLuint sTexture;
+@property (nonatomic, strong) ColoursMetalView *view;
 
 @end
 
+@implementation ColoursViewController {
+    // Shaders
+    id<MTLFunction> _vertexProgram;
+    id<MTLFunction> _fragmentProgram;
+    
+    // Textures and geometry
+    id<MTLTexture> _texture;
+    CGSize _textureSize;
+    id<MTLBuffer> _vertexCoordinates;
+    id<MTLBuffer> _textureCoordinates;
 
+    // Metal state
+    id<MTLCommandQueue> _commandQueue;
+    id<MTLRenderPipelineState> _pipelineState;
+    MTLRenderPassDescriptor *_renderPassDescriptor;
+}
 
-@implementation ColoursViewController
-
-
-@synthesize animating, animationFPS;
-@synthesize context, displayLink;
-@synthesize texture, textureSize;
-@synthesize program;
-@synthesize aPosition, aTextureCoordinate;
-@synthesize uPositioningMatrix, uTintColor;
-@synthesize sTexture;
-
+@dynamic view;
 
 - (void)awakeFromNib
 {
     [super awakeFromNib];
-    
-    EAGLContext *aContext = [[EAGLContext alloc] initWithAPI:kEAGLRenderingAPIOpenGLES2];
-    
-    if (!aContext) {
-        NSLog(@"Failed to create ES context");
-    } else if (![EAGLContext setCurrentContext:aContext]) {
-        NSLog(@"Failed to set ES context current");
-    }
-    
-	self.context = aContext;
-	
-    EAGLView *myEaglView = (EAGLView *)self.view;
-    myEaglView.context = context;
-    [myEaglView setFramebuffer];
-    
-    [self loadShaders];
-    [self loadTexture];
-    
-    // Enable blending - we'll alpha blend.
-    glEnable(GL_BLEND);
-    
-    // Our textures have premultiplied alpha, and (mainly as a result),
-    // the shaders output premultiplied alpha.
-    glBlendFunc(GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
-    
-    animating = NO;
-    
-    // Default 60 fps.
-    animationFPS = 60;
 }
-
 
 - (void)dealloc
 {
-    if (animating) {
+    if (_animating) {
         [self stopAnimation];
     }
-    
-    if (program) {
-        glDeleteProgram(program);
-        program = 0;
-    }
-    
-    if ([EAGLContext currentContext] == context) {
-        [EAGLContext setCurrentContext:nil];
-    }
 }
-
 
 - (void)viewDidAppear:(BOOL)animated
 {
@@ -117,7 +64,6 @@ static const GLfloat sIMacColors[5][4] =
     [super viewDidAppear:animated];
 }
 
-
 - (void)viewWillDisappear:(BOOL)animated
 {
     [self stopAnimation];
@@ -125,79 +71,61 @@ static const GLfloat sIMacColors[5][4] =
     [super viewWillDisappear:animated];
 }
 
-
 - (void)startAnimation
 {
-    if (!animating) {
-        CADisplayLink *aDisplayLink = [self.view.window.screen displayLinkWithTarget:self selector:@selector(drawFrame)];
-        aDisplayLink.preferredFramesPerSecond = animationFPS;
-        [aDisplayLink addToRunLoop:[NSRunLoop currentRunLoop] forMode:NSRunLoopCommonModes];
-        self.displayLink = aDisplayLink;
-        
-        animating = YES;
+    if (!_animating) {
+        self.view.paused = NO;
+        _animating = YES;
     }
 }
-
 
 - (void)stopAnimation
 {
-    if (animating) {
-        [self.displayLink invalidate];
-        self.displayLink = nil;
-        
-        animating = NO;
+    if (_animating) {
+        self.view.paused = YES;
+        _animating = NO;
     }
 }
 
-
-- (void)drawFrame
+- (void)coloursMetalView:(ColoursMetalView *)view didSwitchToMTLDevice:(id<MTLDevice>)device
 {
-    EAGLView *eaglView = (EAGLView *)self.view;
-    [eaglView setFramebuffer];
-    
-    glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
-    glClear(GL_COLOR_BUFFER_BIT);
-    
-    // Use shader program.
-    glUseProgram(program);
-        
-    
-    // Update attribute values.
-    
-    // A big 2 X 2 rectangle centered around 0, 0.
-    // We'll position it using a positioning matrix in the vertex shader.
-    const GLfloat vertexPositions[] = {
-        -1.0f, -1.0f,
-         1.0f, -1.0f,
-        -1.0f,  1.0f,
-         1.0f,  1.0f,
-    };
+    [self loadShadersToMTLDevice:device];
+    [self loadTextureToMTLDevice:device];
+    [self loadGeometryToMTLDevice:device];
+    [self setUpPipelineWithDevice:device];
+}
 
-    glVertexAttribPointer(self.aPosition, 2, GL_FLOAT, 0, 0, vertexPositions);
-    glEnableVertexAttribArray(self.aPosition);
+- (void)coloursMetalView:(ColoursMetalView *)view 
+      renderToMetalLayer:(CAMetalLayer *)layer
+          forDisplayLink:(CADisplayLink *)displayLink
+{
+    id<MTLCommandBuffer> commandBuffer = [_commandQueue commandBuffer];
+    id<CAMetalDrawable> currentDrawable = [layer nextDrawable];
+    if(!currentDrawable)
+    {
+        return;
+    }
 
-    // The GL texture coordinates run from (0.0f, 0.0f) in the top left,
-    // to (1.0f, 1.0f) in the bottom right of the texture, so this will use the 
-    // entire texture to cover the entire rectangle.
-    static const GLfloat textureCoordinates[] = {
-        0.0f, 0.0f,
-        1.0f, 0.0f,
-        0.0f, 1.0f,
-        1.0f, 1.0f,
-    };
+    _renderPassDescriptor.colorAttachments[0].texture = currentDrawable.texture;
     
-    glVertexAttribPointer(self.aTextureCoordinate, 2, GL_FLOAT, 0, 0, textureCoordinates);
-    glEnableVertexAttribArray(self.aTextureCoordinate);
+    id<MTLRenderCommandEncoder> renderEncoder =
+        [commandBuffer renderCommandEncoderWithDescriptor:_renderPassDescriptor];
     
-    // Use our iMac texture.
-    glUniform1i(sTexture, 1);
-    glActiveTexture(GL_TEXTURE1);
-    glBindTexture(GL_TEXTURE_2D, texture);
+    [renderEncoder setRenderPipelineState:_pipelineState];
+
+    [renderEncoder setViewport:(MTLViewport){0, 0, layer.drawableSize.width, layer.drawableSize.height, -1, 1}];
+    
+    // Set the texture
+    [renderEncoder setFragmentTexture:_texture atIndex:0];
+    
+    // Set the untransformed geometry
+    [renderEncoder setVertexBuffer:_vertexCoordinates offset:0 atIndex:0];
+    [renderEncoder setVertexBuffer:_textureCoordinates offset:0 atIndex:1];
 
     // Work out the matrix to position the iMac on the screen 
     CATransform3D staticPositioningTransform = CATransform3DIdentity;
-    CGSize myBoundsSize = self.view.bounds.size;
-    CGSize myTextureSize = self.textureSize;
+    CGSize boundsSize = layer.bounds.size;
+    CGSize textureSize = _textureSize;
     
     // Move the iMac down from the center of the screen
     CATransform3D moveDown = CATransform3DMakeTranslation(0.0f, -1.5f, 0.0f);
@@ -207,14 +135,14 @@ static const GLfloat sIMacColors[5][4] =
     // of the texture.  We scale the height to be correct in terms of the 
     // width.
     CATransform3D correctAspectRatio = CATransform3DMakeScale(1.0f, 
-                                                              myTextureSize.height / myTextureSize.width,
+                                                              textureSize.height / textureSize.width,
                                                               1.0f);
     staticPositioningTransform = CATransform3DConcat(staticPositioningTransform, correctAspectRatio);
     
     // Now, rotate it.  1/4 a rotation per second. around 
     // the Z axis (i.e. the axis pointing 'through' the screen).
     // This will cause a rotation around (0.0, 0.0).
-    CATransform3D rotate = CATransform3DMakeRotation((M_PI * 0.5f) * self.displayLink.timestamp, 
+    CATransform3D rotate = CATransform3DMakeRotation((M_PI * 0.5f) * displayLink.targetTimestamp,
                                                      0.0f, 0.0f, 1.0f);
     staticPositioningTransform = CATransform3DConcat(staticPositioningTransform, rotate);
         
@@ -231,25 +159,26 @@ static const GLfloat sIMacColors[5][4] =
     // textureSize.width is used in both X and Y scaling because we already 
     // scaled, before the rotation, to get the height to be in terms of the
     // width.
-    CATransform3D scaleToSize = CATransform3DMakeScale(textureSize.width / myBoundsSize.width,
-                                                       textureSize.width / myBoundsSize.height,
+    CATransform3D scaleToSize = CATransform3DMakeScale(textureSize.width / boundsSize.width,
+                                                       textureSize.width / boundsSize.height,
                                                        1.0f);
     
     // Lastly, we'll scale the whole scene up or down to fit our entire circle
-    // of iMacs on the screen (turns out this means we need to scale to fit 4
+    // of iMacs on the screen (turns out this means we need to scale to fit 3.25
     // iMacs across the width of the screen, so we work out the scale factor
     // required to do that).
-    CGFloat screenScale = MIN(myBoundsSize.width / textureSize.width,
-                              myBoundsSize.height / textureSize.height);
-    CATransform3D scaleToScreen = CATransform3DMakeScale(screenScale / 4.0f,
-                                                         screenScale / 4.0f,
+    CGFloat screenScale = MIN(boundsSize.width / textureSize.width,
+                              boundsSize.height / textureSize.height);
+    CATransform3D scaleToScreen = CATransform3DMakeScale(screenScale / 3.25f,
+                                                         screenScale / 3.25f,
                                                          1.0f);
     scaleToSize = CATransform3DConcat(scaleToSize, scaleToScreen);
     
     // The angle 'between' each iMac in the circle. 
-    CGFloat iMacSegmentAngle = - 2.0f * (CGFloat)M_PI / 5.0f;
+    NSUInteger iMacCount = sizeof(sIMacColors) / sizeof(sIMacColors[0]);
+    CGFloat iMacSegmentAngle = - 2.0f * (CGFloat)M_PI / (CGFloat)iMacCount;
     
-    for(NSUInteger i = 0; i < 5; ++i) {
+    for(NSUInteger i = 0; i < iMacCount; ++i) {
         CATransform3D thisIMacPositioningTransform = staticPositioningTransform;
 
         // Rotate this iMac into its individual place in the circle
@@ -260,179 +189,53 @@ static const GLfloat sIMacColors[5][4] =
         // we calculated above.
         thisIMacPositioningTransform = CATransform3DConcat(thisIMacPositioningTransform, scaleToSize);
         
-        // Upload the matrix.
-        // In today's 64-bit-CGFloat world, we need to convert from CGFloat to
-        // GLfloat, unfortunately.
-        glUniformMatrix4fv(self.uPositioningMatrix, 1, GL_FALSE, (GLfloat[]){thisIMacPositioningTransform.m11, thisIMacPositioningTransform.m12, thisIMacPositioningTransform.m13, thisIMacPositioningTransform.m14, thisIMacPositioningTransform.m21, thisIMacPositioningTransform.m22, thisIMacPositioningTransform.m23, thisIMacPositioningTransform.m24, thisIMacPositioningTransform.m31, thisIMacPositioningTransform.m32, thisIMacPositioningTransform.m33, thisIMacPositioningTransform.m34, thisIMacPositioningTransform.m41, thisIMacPositioningTransform.m42, thisIMacPositioningTransform.m43, thisIMacPositioningTransform.m44});
+        // Upload the transform matrix. Because CoreAnimation uses CGFloats,
+        // and our Metal shaders use flaots, we need to convert first.
+        [renderEncoder setVertexBytes:(float[]){
+                                        thisIMacPositioningTransform.m11, thisIMacPositioningTransform.m12, thisIMacPositioningTransform.m13, thisIMacPositioningTransform.m14,
+                                        thisIMacPositioningTransform.m21, thisIMacPositioningTransform.m22, thisIMacPositioningTransform.m23, thisIMacPositioningTransform.m24,
+                                        thisIMacPositioningTransform.m31, thisIMacPositioningTransform.m32, thisIMacPositioningTransform.m33, thisIMacPositioningTransform.m34,
+                                        thisIMacPositioningTransform.m41, thisIMacPositioningTransform.m42, thisIMacPositioningTransform.m43, thisIMacPositioningTransform.m44
+                                    }
+                               length:4 * 4 * sizeof(float)
+                              atIndex:2];
         
-        // Per-iMac tint color
-        glUniform4fv(self.uTintColor, 1, sIMacColors[i]);
+        // Upload the tint color.
+        [renderEncoder setVertexBytes:sIMacColors[i]
+                               length:sizeof(sIMacColors[i])
+                              atIndex:3];
         
-        // Validate program before drawing. This is a good check, but only really necessary in a debug build.
-        // DEBUG macro must be defined in your debug configurations if that's not already the case.
-    #if defined(DEBUG)
-        if (![self validateProgram:program]) {
-            NSLog(@"Failed to validate program: %d", program);
-            return;
-        }
-    #endif
-        
-        glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+        // Finally, render our quad!
+        [renderEncoder drawPrimitives:MTLPrimitiveTypeTriangleStrip vertexStart:0 vertexCount:4];
     }
     
-    [eaglView presentFramebuffer];
+    [renderEncoder endEncoding];
+    
+    [commandBuffer presentDrawable:currentDrawable];
+    [commandBuffer commit];
 }
 
-
-- (BOOL)compileShader:(GLuint *)shader type:(GLenum)type URL:(NSURL *)fileURL
+- (void)loadShadersToMTLDevice:(id<MTLDevice>)device
 {
-    GLint status;
-    
-    NSData *source = [NSData dataWithContentsOfURL:fileURL];
-    if (!source)
-    {
-        NSLog(@"Failed to load vertex shader");
-        return NO;
+    _vertexProgram = nil;
+    _fragmentProgram = nil;
+    if(!device) {
+        return;
     }
-    
-    const GLchar *shaderSource = source.bytes;
-    const GLint shaderSourceLength = (GLint)source.length;
-    
-    *shader = glCreateShader(type);
-    glShaderSource(*shader, 1, &shaderSource, &shaderSourceLength);
-    glCompileShader(*shader);
-    
-#if defined(DEBUG)
-    GLint logLength;
-    glGetShaderiv(*shader, GL_INFO_LOG_LENGTH, &logLength);
-    if (logLength > 0)
-    {
-        GLchar *log = (GLchar *)malloc(logLength);
-        glGetShaderInfoLog(*shader, logLength, &logLength, log);
-        NSLog(@"Shader compile log:\n%s", log);
-        free(log);
-    }
-#endif
-    
-    glGetShaderiv(*shader, GL_COMPILE_STATUS, &status);
-    if (status == 0)
-    {
-        glDeleteShader(*shader);
-        return NO;
-    }
-    
-    return YES;
+
+    id<MTLLibrary> shaderLib = [device newDefaultLibrary];
+    _vertexProgram = [shaderLib newFunctionWithName:@"vertexMain"];
+    _fragmentProgram = [shaderLib newFunctionWithName:@"fragmentMain"];
 }
 
-
-- (BOOL)linkProgram:(GLuint)prog
+- (void)loadTextureToMTLDevice:(id<MTLDevice>)device
 {
-    GLint status;
-    
-    glLinkProgram(prog);
-    
-#if defined(DEBUG)
-    GLint logLength;
-    glGetProgramiv(prog, GL_INFO_LOG_LENGTH, &logLength);
-    if (logLength > 0)
-    {
-        GLchar *log = (GLchar *)malloc(logLength);
-        glGetProgramInfoLog(prog, logLength, &logLength, log);
-        NSLog(@"Program link log:\n%s", log);
-        free(log);
-    }
-#endif
-    
-    glGetProgramiv(prog, GL_LINK_STATUS, &status);
-    if (status == 0)
-        return NO;
-    
-    return YES;
-}
-
-
-- (BOOL)validateProgram:(GLuint)prog
-{
-    GLint logLength, status;
-    
-    glValidateProgram(prog);
-    glGetProgramiv(prog, GL_INFO_LOG_LENGTH, &logLength);
-    if (logLength > 0)
-    {
-        GLchar *log = (GLchar *)malloc(logLength);
-        glGetProgramInfoLog(prog, logLength, &logLength, log);
-        NSLog(@"Program validate log:\n%s", log);
-        free(log);
+    _texture = nil;
+    _textureSize = CGSizeZero;
+    if(!device) {
+        return;
     }
     
-    glGetProgramiv(prog, GL_VALIDATE_STATUS, &status);
-    if (status == 0)
-        return NO;
-    
-    return YES;
-}
-
-
-- (BOOL)loadShaders
-{
-    GLuint vertShader, fragShader;
-    
-    // Create shader program.
-    self.program = glCreateProgram();
-    
-    // Create and compile vertex shader.
-    if (![self compileShader:&vertShader type:GL_VERTEX_SHADER URL:[[NSBundle mainBundle] URLForResource:@"Colours" withExtension:@"vsh"]])
-    {
-        glDeleteProgram(program);
-        self.program = 0;
-        NSLog(@"Failed to compile vertex shader");
-        return NO;
-    }
-    
-    // Create and compile fragment shader.
-    if (![self compileShader:&fragShader type:GL_FRAGMENT_SHADER URL:[[NSBundle mainBundle] URLForResource:@"Colours" withExtension:@"fsh"]])
-    {
-        glDeleteProgram(program);
-        self.program = 0;
-        glDeleteShader(vertShader);
-        NSLog(@"Failed to compile fragment shader");
-        return NO;
-    }
-    
-    // Attach the shaders to the program.
-    glAttachShader(program, vertShader);
-    glAttachShader(program, fragShader);
-        
-    // Link program.
-    if (![self linkProgram:program])
-    {
-        glDeleteShader(vertShader);
-        glDeleteShader(fragShader);
-        glDeleteProgram(program);
-        self.program = 0;
-        NSLog(@"Failed to link program: %d", program);
-        return NO;
-    }
-    
-    // Release vertex and fragment shaders - they're linked in to the program now.
-    glDeleteShader(vertShader);
-    glDeleteShader(fragShader);
-    
-    // Get the attribute and uniform locations from the linked program.
-    self.aPosition = glGetAttribLocation(program, "aPosition");
-    self.aTextureCoordinate = glGetAttribLocation(program, "aTextureCoordinate");
-    
-    self.uPositioningMatrix = glGetUniformLocation(program, "uPositioningMatrix");
-    self.uTintColor = glGetUniformLocation(program, "uTintColor");
-    
-    self.sTexture = glGetUniformLocation(program, "sTexture");
-    
-    return YES;
-}
-
-
-- (BOOL)loadTexture
-{
     UIImage *textureImage = [UIImage imageNamed:@"iMacGrey.png"];
     
     // Work out the image size in pixels.
@@ -449,12 +252,13 @@ static const GLfloat sIMacColors[5][4] =
     void *textureRGBAData = malloc(4 * imagePixelSize.width * imagePixelSize.height);
     
     // Create a CGContext around our RGBA buffer to draw the image through.
-    CGColorSpaceRef deviceRGBColorSpace = CGColorSpaceCreateDeviceRGB();
-    CGContextRef textureContext = 
-        CGBitmapContextCreate(textureRGBAData, 
-                              imagePixelSize.width, imagePixelSize.height, 
-                              8, 
-                              imagePixelSize.width * 4,
+    CGColorSpaceRef deviceRGBColorSpace = CGColorSpaceCreateWithName(kCGColorSpaceSRGB);
+    size_t bytesPerRow = imagePixelSize.width * 4;
+    CGContextRef textureContext =
+        CGBitmapContextCreate(textureRGBAData,
+                              imagePixelSize.width, imagePixelSize.height,
+                              8,
+                              bytesPerRow,
                               deviceRGBColorSpace,
                               kCGImageAlphaPremultipliedLast);
     CGColorSpaceRelease(deviceRGBColorSpace);
@@ -469,36 +273,105 @@ static const GLfloat sIMacColors[5][4] =
     
     // We're done with the context now - the data is in the RGBA buffer.
     CGContextRelease(textureContext);
-        
-    GLuint myTexture = 0;
-    glGenTextures(1, &myTexture);
     
-    glBindTexture(GL_TEXTURE_2D, myTexture); 
+    MTLTextureDescriptor *textureDescriptor =
+        [MTLTextureDescriptor texture2DDescriptorWithPixelFormat:MTLPixelFormatRGBA8Unorm
+                                                           width:imagePixelSize.width
+                                                          height:imagePixelSize.height
+                                                       mipmapped:NO];
+    textureDescriptor.storageMode = MTLStorageModeShared;
     
-    glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+    id<MTLTexture> texture = [device newTextureWithDescriptor:textureDescriptor];
     
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 
-                 imagePixelSize.width, imagePixelSize.height, 0, 
-                 GL_RGBA, GL_UNSIGNED_BYTE, textureRGBAData);
-        
-    // Scale the texture with a linear scaling function if we're not
-    // viewing it 1:1 pixels.
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);    
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);    
+    [texture replaceRegion:MTLRegionMake2D(0, 0, imagePixelSize.width, imagePixelSize.height)
+               mipmapLevel:0
+                 withBytes:textureRGBAData
+               bytesPerRow:bytesPerRow];
     
-    // If we try to use a pixel that's off the edge of the texture, this will
-    // use the nearest edge pixel instead.
-    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-    
-    // We're done with the texture data now, OpenGL has kept a copy.
-    free(textureRGBAData);
-    
-    self.texture = myTexture;
-    self.textureSize = imageSize; // Size in points, not pixels.
-    
-    return YES;
+    _texture = texture;
+    _textureSize = imageSize; // Size in points, not pixels.
 }
 
+- (void)loadGeometryToMTLDevice:(id<MTLDevice>)device
+{
+    _vertexCoordinates = nil;
+    _textureCoordinates = nil;
+    if(!device) {
+        return;
+    }
+    
+    // A big 2 X 2 rectangle centered around 0, 0.
+    // We'll position it using a positioning matrix in the vertex shader.
+    static const simd_float2 vertexPositions[] = {
+        { -1.0f, -1.0f },
+        {  1.0f, -1.0f },
+        { -1.0f,  1.0f },
+        {  1.0f,  1.0f },
+    };
+    
+    _vertexCoordinates =
+    [device newBufferWithBytes:vertexPositions
+                        length:sizeof(vertexPositions)
+                       options:MTLResourceStorageModeShared];
+    
+    // The GL texture coordinates run from (0.0f, 0.0f) in the top left,
+    // to (1.0f, 1.0f) in the bottom right of the texture, so this will use the
+    // entire texture to cover the entire rectangle.
+    static const simd_float2 textureCoordinates[] = {
+        { 0.0f, 0.0f } ,
+        { 1.0f, 0.0f },
+        { 0.0f, 1.0f },
+        { 1.0f, 1.0f },
+    };
+    
+    _textureCoordinates =
+    [device newBufferWithBytes:textureCoordinates
+                        length:sizeof(textureCoordinates)
+                       options:MTLResourceStorageModeShared];
+}
+
+- (void)setUpPipelineWithDevice:(id<MTLDevice>)device
+{
+    _commandQueue = nil;
+    _pipelineState = nil;
+    _renderPassDescriptor = nil;
+    if(!device) {
+        return;
+    }
+    
+    // Store the a command queue for later use..
+    _commandQueue = [device newCommandQueue];
+        
+    // Make a pipeline descriptor with out fragment and vertex programs.
+    MTLRenderPipelineDescriptor *pipelineDescriptor = [[MTLRenderPipelineDescriptor alloc] init];
+    pipelineDescriptor.label = @"ColoursPipeline";
+    pipelineDescriptor.vertexFunction = _vertexProgram;
+    pipelineDescriptor.fragmentFunction = _fragmentProgram;
+    pipelineDescriptor.colorAttachments[0].pixelFormat = self.view.pixelFormat;
+    
+    // Set up for blending with premultiplied alpha (our textures, from
+    // CGBitmapContexts, have premultiplied alpha).
+    pipelineDescriptor.colorAttachments[0].blendingEnabled = YES;
+    pipelineDescriptor.colorAttachments[0].sourceRGBBlendFactor = MTLBlendFactorOne;
+    pipelineDescriptor.colorAttachments[0].sourceAlphaBlendFactor = MTLBlendFactorSourceAlpha;
+    pipelineDescriptor.colorAttachments[0].destinationRGBBlendFactor = MTLBlendFactorOneMinusSourceAlpha;
+    pipelineDescriptor.colorAttachments[0].destinationAlphaBlendFactor = MTLBlendFactorOneMinusSourceAlpha;
+    
+    NSError *error;
+    _pipelineState = [device newRenderPipelineStateWithDescriptor:pipelineDescriptor
+                                                            error:&error];
+    if(!_pipelineState)
+    {
+        NSLog(@"ERROR: Failed aquiring pipeline state: %@", error);
+        return;
+    }
+    
+    // Makle a render pass descriptor - we'll reuse it on every render.
+    MTLRenderPassDescriptor *renderPassDescriptor = [MTLRenderPassDescriptor new];
+    renderPassDescriptor.colorAttachments[0].loadAction = MTLLoadActionClear;
+    renderPassDescriptor.colorAttachments[0].storeAction = MTLStoreActionStore;
+    renderPassDescriptor.colorAttachments[0].clearColor = MTLClearColorMake(1, 1, 1, 1);
+    _renderPassDescriptor = renderPassDescriptor;
+}
 
 @end
